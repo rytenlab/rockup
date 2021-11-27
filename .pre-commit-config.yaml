@@ -32,8 +32,10 @@ repos:
         -    cmdfun
         -    covr
         -    knitr
+        -    magrittr
         -    rmarkdown
         -    sessioninfo
+        -    stringr
         -    testthat
     -   id: lintr
         args: [--warn_only]
