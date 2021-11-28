@@ -8,27 +8,26 @@ docker_run_rserver(
   image = "bioconductor/bioconductor_docker:RELEASE_3_13",
   port = 8888,
   password = "bioc",
-  name = "dz_bioc",
+  name = "rockup_container",
   detach = TRUE,
   rm = FALSE,
   volumes = NULL,
   volumes_ro = NULL,
-  permissions = "match",
-  USERID = 1002,
-  GROUPID = 1024,
+  permissions = NULL,
+  USERID = NULL,
+  GROUPID = NULL,
   verbose = TRUE,
   return_flags = FALSE
 )
 }
 \arguments{
-\item{image}{\code{character(1)} name of the image to use}
+\item{image}{\code{character(1)} the name of the \code{rocker} image to use.}
 
-\item{port}{\code{integer(1)} port of the host which will be used to access
-RStudio server via \code{localhost::port}.}
+\item{port}{\code{integer(1)} the port to present R Studio server at`.}
 
-\item{password}{\code{character(1)} password to used for RStudio server.}
+\item{password}{\code{character(1)} the password to used for R Studio server.}
 
-\item{name}{\code{character(1)} name for the container.}
+\item{name}{\code{character(1)} the name for the container.}
 
 \item{detach}{\code{logical(1)} whether to use the \code{-d} flag when running the
 container. Should the container continue to run in the background after
@@ -37,14 +36,14 @@ container. Should the container continue to run in the background after
 \item{rm}{\code{logical(1)} whether to use the \code{-rm} flag when running the
 container. Should the container be removed when stopped?}
 
-\item{volumes}{\code{character(1)} paths for the hosts files that you want
-accessible in the container. See argument \code{permissions} for read/write
-access to these. Can either be a path on host or in the form
+\item{volumes}{\code{character(1)} the paths for the host files/directories that
+you want accessible in the container. See argument \code{permissions} for
+read/write access to these. Can either be a path on host or in the form
 "host_path:container_path".}
 
-\item{volumes_ro}{\code{character(1)} paths for the hosts files that you want
-accessible in the container. These will be read-only on the container and
-this option is recommended for any volumes you don't need to modify.}
+\item{volumes_ro}{\code{character(1)} the paths for the host files/directories
+that you want to have read-only access for in the container. This option is
+recommended for any volumes you don't need to modify.}
 
 \item{permissions}{\code{character(1)} if set to "match" (be careful!), then the
 permissions of the mounted volumes on the container, will match that of the
@@ -61,7 +60,8 @@ the permissions of the mounted volumes to match.}
 debugging purposes).}
 
 \item{return_flags}{\code{logical(1)} whether to return the flags to be inputted
-into \verb{docker run}. Used for testing and example.}
+into \verb{docker run}, rather than run the command. Mainly here for testing and
+roxygen example.}
 }
 \description{
 A wrapper for the docker function used to run a R Studio server process on a
@@ -76,14 +76,24 @@ of interest.
 }
 \examples{
 
-docker_flags <- docker_run_rserver(return_flags = TRUE)
+# below is an example of running docker_run_rserver with minimal config
+# importantly, return_flags is set to TRUE
+# so this command will NOT execute the docker run command
+# only return the flags that would be run, were return_flags set to FALSE
+# this is purely for the roxygen example
+# in practice, users should set return_flags to FALSE
+docker_flags <- docker_run_rserver(
+  image = "bioconductor/bioconductor_docker:RELEASE_3_13",
+  port = 8888,
+  name = "your_container_name",
+  return_flags = TRUE
+)
 
 # the docker command that would run on the system if return_flags = FALSE
 paste(c("docker", docker_flags), collapse = " ")
 }
 \references{
-\code{docker_run_rserver} is based on
-\verb{https://github.com/LieberInstitute/megadepth/blob/master/R/megadepth.R}.
-The solution for the \code{permissions} of the \code{volumes} was taken from
+The solution for the \code{permissions} of the \code{volumes} was taken
+from
 https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine.
 }

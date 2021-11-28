@@ -10,23 +10,22 @@
 #' the correct permissions, these settings should be modified to match the user
 #' of interest.
 #'
-#' @param image `character(1)` name of the image to use
-#' @param port `integer(1)` port of the host which will be used to access
-#'   RStudio server via `localhost::port`.
-#' @param password `character(1)` password to used for RStudio server.
-#' @param name `character(1)` name for the container.
+#' @param image `character(1)` the name of the `rocker` image to use.
+#' @param port `integer(1)` the port to present R Studio server at`.
+#' @param password `character(1)` the password to used for R Studio server.
+#' @param name `character(1)` the name for the container.
 #' @param detach `logical(1)` whether to use the `-d` flag when running the
 #'   container. Should the container continue to run in the background after
 #'   `docker run` has executed?
 #' @param rm `logical(1)` whether to use the `-rm` flag when running the
 #'   container. Should the container be removed when stopped?
-#' @param volumes `character(1)` paths for the hosts files that you want
-#'   accessible in the container. See argument `permissions` for read/write
-#'   access to these. Can either be a path on host or in the form
+#' @param volumes `character(1)` the paths for the host files/directories that
+#'   you want accessible in the container. See argument `permissions` for
+#'   read/write access to these. Can either be a path on host or in the form
 #'   "host_path:container_path".
-#' @param volumes_ro `character(1)` paths for the hosts files that you want
-#'   accessible in the container. These will be read-only on the container and
-#'   this option is recommended for any volumes you don't need to modify.
+#' @param volumes_ro `character(1)` the paths for the host files/directories
+#'   that you want to have read-only access for in the container. This option is
+#'   recommended for any volumes you don't need to modify.
 #' @param permissions `character(1)` if set to "match" (be careful!), then the
 #'   permissions of the mounted volumes on the container, will match that of the
 #'   host. I.e. the user executing the docker command will have permissions to
@@ -38,33 +37,44 @@
 #' @param verbose `logical(1)` whether to display the command to be run (for
 #'   debugging purposes).
 #' @param return_flags `logical(1)` whether to return the flags to be inputted
-#'   into `docker run`. Used for testing and example.
+#'   into `docker run`, rather than run the command. Mainly here for testing and
+#'   roxygen example.
 #'
 #' @return NULL
 #' @export
 #'
-#' @references `docker_run_rserver` is based on
-#'   `https://github.com/LieberInstitute/megadepth/blob/master/R/megadepth.R`.
-#'   The solution for the `permissions` of the `volumes` was taken from
+#' @references The solution for the `permissions` of the `volumes` was taken
+#'   from
 #'   https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine.
 #'
 #' @examples
 #'
-#' docker_flags <- docker_run_rserver(return_flags = TRUE)
+#' # below is an example of running docker_run_rserver with minimal config
+#' # importantly, return_flags is set to TRUE
+#' # so this command will NOT execute the docker run command
+#' # only return the flags that would be run, were return_flags set to FALSE
+#' # this is purely for the roxygen example
+#' # in practice, users should set return_flags to FALSE
+#' docker_flags <- docker_run_rserver(
+#'   image = "bioconductor/bioconductor_docker:RELEASE_3_13",
+#'   port = 8888,
+#'   name = "your_container_name",
+#'   return_flags = TRUE
+#' )
 #'
 #' # the docker command that would run on the system if return_flags = FALSE
 #' paste(c("docker", docker_flags), collapse = " ")
 docker_run_rserver <- function(image = "bioconductor/bioconductor_docker:RELEASE_3_13",
                                port = 8888,
                                password = "bioc",
-                               name = "dz_bioc",
+                               name = "rockup_container",
                                detach = TRUE,
                                rm = FALSE,
                                volumes = NULL,
                                volumes_ro = NULL,
-                               permissions = "match",
-                               USERID = 1002,
-                               GROUPID = 1024,
+                               permissions = NULL,
+                               USERID = NULL,
+                               GROUPID = NULL,
                                verbose = TRUE,
                                return_flags = FALSE) {
 
@@ -79,16 +89,19 @@ docker_run_rserver <- function(image = "bioconductor/bioconductor_docker:RELEASE
     cmdfun::cmd_list_interp() %>%
     cmdfun::cmd_list_to_flags(prefix = "--")
 
-  # set up UID to match the host user
+  # set up USERID/GROUPID to match the host user
   # so volume permissions also match the host
   if (!is.null(permissions)) {
+    if (is.null(USERID) || is.null(GROUPID)) {
+      stop("USERID and GROUPID must be non-NULL, if permissions set to 'match'")
+    }
     if (permissions == "match") {
       permissions <- paste0(
         "--env USERID=", USERID, " ",
         "--env GROUPID=", GROUPID
       )
     } else {
-      stop("permissions must be `match` or NULL")
+      stop("permissions must be 'match' or NULL")
     }
   }
 
