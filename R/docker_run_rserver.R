@@ -64,7 +64,7 @@
 #'
 #' # the docker command that would run on the system if return_flags = FALSE
 #' paste(c("docker", docker_flags), collapse = " ")
-docker_run_rserver <- function(image = "bioconductor/bioconductor_docker:RELEASE_3_13",
+docker_run_rserver <- function(image,
                                port = 8888,
                                password = "bioc",
                                name = "rockup_container",

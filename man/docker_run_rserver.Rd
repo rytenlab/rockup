@@ -5,7 +5,7 @@
 \title{Run an R Studio server instance on rocker-based image}
 \usage{
 docker_run_rserver(
-  image = "bioconductor/bioconductor_docker:RELEASE_3_13",
+  image,
   port = 8888,
   password = "bioc",
   name = "rockup_container",
