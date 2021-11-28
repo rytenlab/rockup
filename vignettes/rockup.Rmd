@@ -1,0 +1,152 @@
+---
+title: "Connecting to R Studio server using rockup"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rockup}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(rockup)
+```
+
+<br><br>
+
+# Background
+
+- [R Studio server](https://www.rstudio.com/products/rstudio/download-server/) allows user's to code using a convenient IDE, whilst harnessing the processing power of a computing remote cluster/server. 
+- However, the installation and maintenance of the R Studio server software can be time-consuming. Also, the free version of R Studio server only permits a single version of `R` to be used. Assuming you are not willing to pay, this can limit analyses that depend on `R` packages across multiple versions of `R`. 
+- Using a docker image from the [rocker project](https://hub.docker.com/r/rocker/rstudio) with R/R Studio server pre-installed, you can easily bypass the two limitations above. A user can connect to the `rocker` image via an `ssh` tunnel, accessing R Studio server through their local web browser. Each docker image can have a unique installation of R Studio server, thus any number of `R` versions can be used. 
+- The following guide will demonstrate how to install and connect to a R Studio server via a `rocker` image on a remote server. 
+- This guide does **not** cover the fundamentals of docker itself and it is recommended that anyone using this guide should already have a basic proficiency with docker.  
+
+<br><br>
+
+# Guide
+
+## Docker installation
+
+You must have `docker` installed on your system. To check you have `docker` installed, you can use: 
+
+```{bash check-docker-version, eval = FALSE}
+# based on: https://www.digitalocean.com/community/questions/how-to-check-for-docker-installation
+docker -v
+echo $?
+```
+
+If you don't, install `docker`. A guide to installing `docker` on Ubuntu 18.04 can be found [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04).
+
+<br><br>
+
+## Download a `rocker` image
+
+In order to use R Studio server, a `docker` image with R Studio server pre-installed is required. [Bioconductor](https://www.bioconductor.org/help/docker/) releases it's own `docker` image that inherits from `rocker`, with other useful system dependencies for analyses of biological data pre-installed, such as core Bioconductor packages. You can download the Bioconductor docker image using:
+
+```{bash download-rocker, eval = FALSE}
+# the 3.13 release version of Bioconductor docker image is used here
+# be sure to check for an updated version as and when you use this guide
+sudo docker pull bioconductor/bioconductor_docker:RELEASE_3_13
+```
+
+<br><br>
+
+## Start a R Studio server process (on a remote server)
+
+To initialise a container running R Studio server on the Bioconductor `docker` image downloaded above, you need to execute the `docker run` command with various flags depending on your desired setup. `rockup` has a single user-level function `docker_run_rserver()` which is designed to make this step easier and executable within `R`. 
+
+First, make sure you have `rockup` installed. If you don't, you can download `rockup` from GitHub via:
+
+```{r install-rockup, eval = FALSE}
+# this requires R version >= 4.0
+devtools::install_github("ryten_lab/rockup")
+```
+
+Next, run `rockup::docker_run_rserver()` within an `R` terminal **on the remote server/machine where you want to use R Studio server**. At a minimum, you should set the `image`, `port` and `name` arguments explained below. Setting the `verbose` argument to TRUE will print the flags that were used within the `docker` command and can be useful for debugging or logging. 
+
+```{r docker-run-rserver-ex1, eval = FALSE}
+rockup::docker_run_rserver(
+  image = "bioconductor/bioconductor_docker:RELEASE_3_13", # rocker image
+  port = 8787, # port on which the host will have present R Studio server
+  name = "example", # name of docker process
+  verbose = TRUE # whether to print out the flags passed to the docker command
+)
+```
+
+<br><br>
+
+## Connecting to a R Studio server process (from your local machine)
+
+Once the R Studio server process is running, the next step is to map the `localhost` port of your local machine to the `port` presenting R Studio server on the remote server (specified above as 8787). You can do so by executing the `ssh` command shown below **on your local machine**: 
+
+```{bash ssh-tunnel, eval = FALSE}
+# make sure the port specified here matches the port you have used above in 
+# rockup::docker_run_rserver()
+ssh \
+-X -N -f -L localhost:8787:localhost:8787 \
+user@ip
+```
+
+If the above `ssh` command has run successfully, you will now be able to access R Studio server by going to the address `localhost:8787` on your local browser. The default login details for the Bioconductor docker are:
+
+Username: **rstudio**
+
+Password: **bioc**
+
+More details of the Bioconductor docker can be found [here](https://www.bioconductor.org/help/docker/).
+
+<br><br>
+
+## Mounting volumes 
+
+Most analyses relies on data that is stored on the original host machine, therefore not (by default) accessible by the `docker` container. Therefore, it is often useful to mount the required files, allowing them to be accessible by the `docker` process. Mounting files can be done using `rockup::docker_run_rserver()` via the arguments `volumes`, `volumes_ro`. 
+
+Directories mounted using the `volumes_ro` argument will always have read-only access permissions on the `docker` container. 
+
+The user permissions for accessing files mounted using `volumes` argument are dictated by the `USERID` and `GROUPID` arguments. These should be set matching the user you would like to mirror the permissions of. On Linux, the `USERID` and `GROUPID` of the current user can be obtained via the `bash` command `id`. **Warning: depending on the permissions, this could give your docker container the ability to delete the mounted files**
+
+Below is an example of running `rockup::docker_run_rserver()`, whilst mounting volumes: 
+
+```{r docker-run-rserver-ex2, eval = FALSE}
+# volumes - paths will be mounted with user permissions
+# matching user specified by the USERID and GROUPID arguments
+# volumes_ro - paths will be mounted with read-only access
+rockup::docker_run_rserver(
+  image = "bioconductor/bioconductor_docker:RELEASE_3_13",
+  port = 8787,
+  name = "example_2",
+  verbose = TRUE,
+  volumes = c(
+    "/path/to/mounted/dir/that/will/match/permissions/"
+  ),
+  volumes_ro = c(
+    "/path/to/mounted/dir/that/will/be/read_only"
+  ),
+  permissions = "match",
+  USERID = 1000,
+  GROUPID = 1000
+)
+```
+
+<br><br>
+
+# Session info
+
+<details>
+  <summary>Show/hide</summary>
+```{r session-info, echo = FALSE}
+
+library("sessioninfo")
+
+options(width = 120)
+
+session_info()
+```
+</details> 
