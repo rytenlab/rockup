@@ -23,9 +23,9 @@ library(rockup)
 # Background
 
 - [R Studio server](https://www.rstudio.com/products/rstudio/download-server/) allows user's to code using a convenient IDE, whilst harnessing the processing power of a computing remote cluster/server. 
-- However, the installation and maintenance of the R Studio server software can be time-consuming. Also, the free version of R Studio server only permits a single version of `R` to be used. Assuming you are not willing to pay, this can limit analyses that depend on `R` packages across multiple versions of `R`. 
-- Using a docker image from the [rocker project](https://hub.docker.com/r/rocker/rstudio) with R/R Studio server pre-installed, you can easily bypass the two limitations above. A user can connect to the `rocker` image via an `ssh` tunnel, accessing R Studio server through their local web browser. Each docker image can have a unique installation of R Studio server, thus any number of `R` versions can be used. 
-- The following guide will demonstrate how to install and connect to a R Studio server via a `rocker` image on a remote server. 
+- However, the installation and maintenance of the R Studio server software can be time-consuming. Also, the free version of R Studio server only permits a single version of `R` to be used. Assuming you are not willing to pay, this can make analyses that depend on `R` packages across multiple versions of `R` inconvenient to run. 
+- Using a docker image from the [rocker project](https://hub.docker.com/r/rocker/rstudio) with `R`/R Studio server pre-installed, you can easily bypass the two limitations above. A user can connect to the `rocker` image via an `ssh` tunnel, accessing R Studio server through their local web browser. Each docker image can have a unique installation of R Studio server, thus any number of `R` versions can be used. 
+- The following guide will demonstrate how to install and connect to a R Studio server container that's running on a `rocker` image on a remote server. 
 - This guide does **not** cover the fundamentals of docker itself and it is recommended that anyone using this guide should already have a basic proficiency with docker.  
 
 <br><br>
@@ -62,7 +62,7 @@ sudo docker pull bioconductor/bioconductor_docker:RELEASE_3_13
 
 To initialise a container running R Studio server on the Bioconductor `docker` image downloaded above, you need to execute the `docker run` command with various flags depending on your desired setup. `rockup` has a single user-level function `docker_run_rserver()` which is designed to make this step easier and executable within `R`. 
 
-First, make sure you have `rockup` installed. If you don't, you can download `rockup` from GitHub via:
+First, make sure you have `rockup` installed. If you don't, you can install `rockup` from GitHub via:
 
 ```{r install-rockup, eval = FALSE}
 # this requires R version >= 4.0
@@ -71,10 +71,12 @@ devtools::install_github("ryten_lab/rockup")
 
 Next, run `rockup::docker_run_rserver()` within an `R` terminal **on the remote server/machine where you want to use R Studio server**. At a minimum, you should set the `image`, `port` and `name` arguments explained below. Setting the `verbose` argument to TRUE will print the flags that were used within the `docker` command and can be useful for debugging or logging. 
 
+**Important**: if you are running this on the Ryten lab server, it is worth making sure: 1. The `port` you use does not overlap with one that's already in use. The list of in use ports can be found in the ryten_induction bookdown [here](https://rytenlab.github.io/ryten_induction/server-usage.html#ryten-ports). 2. If you're occupying a new `port`, please add it to the list of in use ports (or ask another member to).
+
 ```{r docker-run-rserver-ex1, eval = FALSE}
 rockup::docker_run_rserver(
-  image = "bioconductor/bioconductor_docker:RELEASE_3_13", # rocker image
-  port = 8787, # port on which the host will have present R Studio server
+  image = "bioconductor/bioconductor_docker:RELEASE_3_13", # a rocker image, or one that inherits from rocker
+  port = 8888, # port on which the host will have present R Studio server
   name = "example", # name of docker process
   verbose = TRUE # whether to print out the flags passed to the docker command
 )
@@ -120,7 +122,7 @@ Below is an example of running `rockup::docker_run_rserver()`, whilst mounting v
 # volumes_ro - paths will be mounted with read-only access
 rockup::docker_run_rserver(
   image = "bioconductor/bioconductor_docker:RELEASE_3_13",
-  port = 8787,
+  port = 8888,
   name = "example_2",
   verbose = TRUE,
   volumes = c(
