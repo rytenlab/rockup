@@ -6,7 +6,7 @@
 \usage{
 docker_run_rserver(
   image,
-  port = 8888,
+  port,
   password = "bioc",
   name = "rockup_container",
   detach = TRUE,

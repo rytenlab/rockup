@@ -65,7 +65,7 @@
 #' # the docker command that would run on the system if return_flags = FALSE
 #' paste(c("docker", docker_flags), collapse = " ")
 docker_run_rserver <- function(image,
-                               port = 8888,
+                               port,
                                password = "bioc",
                                name = "rockup_container",
                                detach = TRUE,
