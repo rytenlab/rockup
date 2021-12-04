@@ -28,6 +28,24 @@ Install the development version of `rockup` from
 BiocManager::install("rytenlab/rockup")
 ```
 
+## Basic usage
+
+`rockup` has a single user-level function
+[docker_run_rserver](https://rytenlab.github.io/rockup/reference/docker_run_rserver.html),
+which is designed to start a container running R Studio Server on a
+[rocker](https://github.com/rocker-org/rocker). Below is an example of
+how to run `docker_run_rserver` with minimal config, for a more detailed
+guide see the
+[vignette](https://rytenlab.github.io/rockup/articles/rockup.html).
+
+``` r
+docker_run_rserver(
+  image = "bioconductor/bioconductor_docker:RELEASE_3_13",
+  port = 8888,
+  name = "your_container_name"
+)
+```
+
 ## Code of Conduct
 
 Please note that the `rockup` project is released with a [Contributor

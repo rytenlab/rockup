@@ -6,10 +6,10 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-    collapse = TRUE,
-    comment = "#>",
-    fig.path = "man/figures/README-",
-    out.width = "100%"
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
 )
 ```
 
@@ -33,6 +33,18 @@ Install the development version of `rockup` from [GitHub](https://github.com/ryt
 BiocManager::install("rytenlab/rockup")
 ```
 
+## Basic usage
+
+`rockup` has a single user-level function [docker_run_rserver](https://rytenlab.github.io/rockup/reference/docker_run_rserver.html), which is designed to start a container running R Studio Server on a [rocker](https://github.com/rocker-org/rocker). Below is an example of how to run `docker_run_rserver` with minimal config, for a more detailed guide see the [vignette](https://rytenlab.github.io/rockup/articles/rockup.html). 
+
+```{r basic-usage, eval = FALSE}
+docker_run_rserver(
+  image = "bioconductor/bioconductor_docker:RELEASE_3_13",
+  port = 8888,
+  name = "your_container_name"
+)
+```
+
 ## Code of Conduct
 
 Please note that the `rockup` project is released with a [Contributor Code of Conduct](http://bioconductor.org/about/code-of-conduct/). By contributing to this project, you agree to abide by its terms.
@@ -48,5 +60,3 @@ Please note that the `rockup` project is released with a [Contributor Code of Co
 For more details, check the `dev` directory.
 
 This package was developed using `r BiocStyle::Biocpkg('biocthis')`.
-
-
