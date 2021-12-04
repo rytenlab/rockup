@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rockup</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/rockup.html">Get started</a>
 </li>
@@ -52,7 +48,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rytenlab/rockup/">
+  <a href="https://github.com/rytenlab/rockup/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -69,92 +65,114 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="rockup" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#rockup" class="anchor"></a>rockup</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="rockup">rockup<a class="anchor" aria-label="anchor" href="#rockup"></a>
+</h1></div>
 <!-- badges: start -->
 
-<p>The goal of <code>rockup</code> is to make it easy to connect to R Studio Server via <a href="https://github.com/rocker-org/rocker">rocker</a>.</p>
-<div id="installation-instructions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation-instructions" class="anchor"></a>Installation instructions</h2>
-<p>Install the development version of <code>rockup</code> from <a href="https://github.com/rytenlab/rockup">GitHub</a> with:</p>
+<p>The goal of <code>rockup</code> is to make it easy to connect to R Studio Server via <a href="https://github.com/rocker-org/rocker" class="external-link">rocker</a>.</p>
+<div class="section level2">
+<h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
+</h2>
+<p>Install the development version of <code>rockup</code> from <a href="https://github.com/rytenlab/rockup" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"rytenlab/rockup"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"rytenlab/rockup"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="code-of-conduct" class="section level2">
-<h2 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
-<p>Please note that the <code>rockup</code> project is released with a <a href="http://bioconductor.org/about/code-of-conduct/">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<div class="section level2">
+<h2 id="basic-usage">Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+</h2>
+<p><code>rockup</code> has a single user-level function <a href="https://rytenlab.github.io/rockup/reference/docker_run_rserver.html" class="external-link">docker_run_rserver</a>, which is designed to start a container running R Studio Server on a <a href="https://github.com/rocker-org/rocker" class="external-link">rocker</a>. Below is an example of how to run <code>docker_run_rserver</code> with minimal config, for a more detailed guide see the <a href="https://rytenlab.github.io/rockup/articles/rockup.html" class="external-link">vignette</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/docker_run_rserver.html">docker_run_rserver</a></span><span class="op">(</span>
+  image <span class="op">=</span> <span class="st">"bioconductor/bioconductor_docker:RELEASE_3_13"</span>,
+  port <span class="op">=</span> <span class="fl">8888</span>,
+  name <span class="op">=</span> <span class="st">"your_container_name"</span>
+<span class="op">)</span></code></pre></div>
 </div>
-<div id="development-tools" class="section level2">
-<h2 class="hasAnchor">
-<a href="#development-tools" class="anchor"></a>Development tools</h2>
+<div class="section level2">
+<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h2>
+<p>Please note that the <code>rockup</code> project is released with a <a href="http://bioconductor.org/about/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
+<div class="section level2">
+<h2 id="development-tools">Development tools<a class="anchor" aria-label="anchor" href="#development-tools"></a>
+</h2>
 <ul>
-<li>Continuous code testing is possible thanks to <a href="https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/">GitHub actions</a> through <em><a href="https://CRAN.R-project.org/package=usethis">usethis</a></em>, <em><a href="https://CRAN.R-project.org/package=remotes">remotes</a></em>, and <em><a href="https://CRAN.R-project.org/package=rcmdcheck">rcmdcheck</a></em> customized to use <a href="https://www.bioconductor.org/help/docker/">Bioconductor’s docker containers</a> and <em><a href="https://bioconductor.org/packages/3.14/BiocCheck">BiocCheck</a></em>.</li>
-<li>Code coverage assessment is possible thanks to <a href="https://codecov.io/gh">codecov</a> and <em><a href="https://CRAN.R-project.org/package=covr">covr</a></em>.</li>
-<li>The <a href="http://rytenlab.github.io/rockup">documentation website</a> is automatically updated thanks to <em><a href="https://CRAN.R-project.org/package=pkgdown">pkgdown</a></em>.</li>
-<li>The code is styled automatically thanks to <em><a href="https://CRAN.R-project.org/package=styler">styler</a></em>.</li>
-<li>The documentation is formatted thanks to <em><a href="https://CRAN.R-project.org/package=devtools">devtools</a></em> and <em><a href="https://CRAN.R-project.org/package=roxygen2">roxygen2</a></em>.</li>
+<li>Continuous code testing is possible thanks to <a href="https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/" class="external-link">GitHub actions</a> through <em><a href="https://CRAN.R-project.org/package=usethis" class="external-link">usethis</a></em>, <em><a href="https://CRAN.R-project.org/package=remotes" class="external-link">remotes</a></em>, and <em><a href="https://CRAN.R-project.org/package=rcmdcheck" class="external-link">rcmdcheck</a></em> customized to use <a href="https://www.bioconductor.org/help/docker/" class="external-link">Bioconductor’s docker containers</a> and <em><a href="https://bioconductor.org/packages/3.14/BiocCheck" class="external-link">BiocCheck</a></em>.</li>
+<li>Code coverage assessment is possible thanks to <a href="https://codecov.io/gh" class="external-link">codecov</a> and <em><a href="https://CRAN.R-project.org/package=covr" class="external-link">covr</a></em>.</li>
+<li>The <a href="http://rytenlab.github.io/rockup" class="external-link">documentation website</a> is automatically updated thanks to <em><a href="https://CRAN.R-project.org/package=pkgdown" class="external-link">pkgdown</a></em>.</li>
+<li>The code is styled automatically thanks to <em><a href="https://CRAN.R-project.org/package=styler" class="external-link">styler</a></em>.</li>
+<li>The documentation is formatted thanks to <em><a href="https://CRAN.R-project.org/package=devtools" class="external-link">devtools</a></em> and <em><a href="https://CRAN.R-project.org/package=roxygen2" class="external-link">roxygen2</a></em>.</li>
 </ul>
 <p>For more details, check the <code>dev</code> directory.</p>
-<p>This package was developed using <em><a href="https://bioconductor.org/packages/3.14/biocthis">biocthis</a></em>.</p>
+<p>This package was developed using <em><a href="https://bioconductor.org/packages/3.14/biocthis" class="external-link">biocthis</a></em>.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/rytenlab/rockup/">https://​github.com/​rytenlab/​rockup/​</a>
-</li>
-<li>Report a bug at <br><a href="https://support.bioconductor.org/t/rockup">https://​support.bioconductor.org/​t/​rockup</a>
-</li>
+<li><a href="https://github.com/rytenlab/rockup/" class="external-link">Browse source code</a></li>
+<li><a href="https://support.bioconductor.org/t/rockup" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>David Zhang <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2382-8460" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing rockup</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/rytenlab/rockup/issues"><img src="https://img.shields.io/github/issues/rytenlab/rockup" alt="GitHub issues"></a></li>
-<li><a href="https://github.com/rytenlab/rockup/pulls"><img src="https://img.shields.io/github/issues-pr/rytenlab/rockup" alt="GitHub pulls"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://github.com/rytenlab/rockup/actions"><img src="https://github.com/rytenlab/rockup/workflows/R-CMD-check-bioc/badge.svg" alt="R-CMD-check-bioc"></a></li>
-<li><a href="https://app.codecov.io/gh/rytenlab/rockup?branch=main"><img src="https://codecov.io/gh/rytenlab/rockup/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li>David Zhang <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2382-8460" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/rytenlab/rockup/issues" class="external-link"><img src="https://img.shields.io/github/issues/rytenlab/rockup" alt="GitHub issues"></a></li>
+<li><a href="https://github.com/rytenlab/rockup/pulls" class="external-link"><img src="https://img.shields.io/github/issues-pr/rytenlab/rockup" alt="GitHub pulls"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/rytenlab/rockup/actions" class="external-link"><img src="https://github.com/rytenlab/rockup/workflows/R-CMD-check-bioc/badge.svg" alt="R-CMD-check-bioc"></a></li>
+<li><a href="https://app.codecov.io/gh/rytenlab/rockup?branch=main" class="external-link"><img src="https://codecov.io/gh/rytenlab/rockup/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by David Zhang.</p>
+  <p></p>
+<p>Developed by David Zhang.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
 
       </footer>
@@ -162,6 +180,8 @@
 
   
 
+
+  
 
   </body>
 </html>

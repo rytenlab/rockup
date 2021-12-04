@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rockup</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/rockup.html">Get started</a>
 </li>
@@ -52,7 +48,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rytenlab/rockup/">
+  <a href="https://github.com/rytenlab/rockup/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -67,13 +63,13 @@
 
       
 
-      </header><script src="rockup_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Connecting to R Studio server using rockup</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/rytenlab/rockup/blob/master/vignettes/rockup.Rmd"><code>vignettes/rockup.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rytenlab/rockup/blob/HEAD/vignettes/rockup.Rmd" class="external-link"><code>vignettes/rockup.Rmd</code></a></small>
       <div class="hidden name"><code>rockup.Rmd</code></div>
 
     </div>
@@ -81,64 +77,65 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rytenlab/rockup">rockup</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rytenlab/rockup" class="external-link">rockup</a></span><span class="op">)</span></code></pre></div>
 <p><br><br></p>
-<div id="background" class="section level1">
-<h1 class="hasAnchor">
-<a href="#background" class="anchor"></a>Background</h1>
+<div class="section level1">
+<h1 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
+</h1>
 <ul>
 <li>
-<a href="https://www.rstudio.com/products/rstudio/download-server/">R Studio server</a> allows user’s to code using a convenient IDE, whilst harnessing the processing power of a computing remote cluster/server.</li>
-<li>However, the installation and maintenance of the R Studio server software can be time-consuming. Also, the free version of R Studio server only permits a single version of <code>R</code> to be used. Assuming you are not willing to pay, this can limit analyses that depend on <code>R</code> packages across multiple versions of <code>R</code>.</li>
-<li>Using a docker image from the <a href="https://hub.docker.com/r/rocker/rstudio">rocker project</a> with R/R Studio server pre-installed, you can easily bypass the two limitations above. A user can connect to the <code>rocker</code> image via an <code>ssh</code> tunnel, accessing R Studio server through their local web browser. Each docker image can have a unique installation of R Studio server, thus any number of <code>R</code> versions can be used.</li>
-<li>The following guide will demonstrate how to install and connect to a R Studio server via a <code>rocker</code> image on a remote server.</li>
+<a href="https://www.rstudio.com/products/rstudio/download-server/" class="external-link">R Studio server</a> allows user’s to code using a convenient IDE, whilst harnessing the processing power of a computing remote cluster/server.</li>
+<li>However, the installation and maintenance of the R Studio server software can be time-consuming. Also, the free version of R Studio server only permits a single version of <code>R</code> to be used. Assuming you are not willing to pay, this can make analyses that depend on <code>R</code> packages across multiple versions of <code>R</code> inconvenient to run.</li>
+<li>Using a docker image from the <a href="https://hub.docker.com/r/rocker/rstudio" class="external-link">rocker project</a> with <code>R</code>/R Studio server pre-installed, you can easily bypass the two limitations above. A user can connect to the <code>rocker</code> image via an <code>ssh</code> tunnel, accessing R Studio server through their local web browser. Each docker image can have a unique installation of R Studio server, thus any number of <code>R</code> versions can be used.</li>
+<li>The following guide will demonstrate how to install and connect to a R Studio server container that’s running on a <code>rocker</code> image on a remote server.</li>
 <li>This guide does <strong>not</strong> cover the fundamentals of docker itself and it is recommended that anyone using this guide should already have a basic proficiency with docker.</li>
 </ul>
 <p><br><br></p>
 </div>
-<div id="guide" class="section level1">
-<h1 class="hasAnchor">
-<a href="#guide" class="anchor"></a>Guide</h1>
-<div id="docker-installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#docker-installation" class="anchor"></a>Docker installation</h2>
+<div class="section level1">
+<h1 id="guide">Guide<a class="anchor" aria-label="anchor" href="#guide"></a>
+</h1>
+<div class="section level2">
+<h2 id="docker-installation">Docker installation<a class="anchor" aria-label="anchor" href="#docker-installation"></a>
+</h2>
 <p>You must have <code>docker</code> installed on your system. To check you have <code>docker</code> installed, you can use:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># based on: https://www.digitalocean.com/community/questions/how-to-check-for-docker-installation</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> <span class="at">-v</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$?</span></span></code></pre></div>
-<p>If you don’t, install <code>docker</code>. A guide to installing <code>docker</code> on Ubuntu 18.04 can be found <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04">here</a>.</p>
+<p>If you don’t, install <code>docker</code>. A guide to installing <code>docker</code> on Ubuntu 18.04 can be found <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04" class="external-link">here</a>.</p>
 <p><br><br></p>
 </div>
-<div id="download-a-rocker-image" class="section level2">
-<h2 class="hasAnchor">
-<a href="#download-a-rocker-image" class="anchor"></a>Download a <code>rocker</code> image</h2>
-<p>In order to use R Studio server, a <code>docker</code> image with R Studio server pre-installed is required. <a href="https://www.bioconductor.org/help/docker/">Bioconductor</a> releases it’s own <code>docker</code> image that inherits from <code>rocker</code>, with other useful system dependencies for analyses of biological data pre-installed, such as core Bioconductor packages. You can download the Bioconductor docker image using:</p>
+<div class="section level2">
+<h2 id="download-a-rocker-image">Download a <code>rocker</code> image<a class="anchor" aria-label="anchor" href="#download-a-rocker-image"></a>
+</h2>
+<p>In order to use R Studio server, a <code>docker</code> image with R Studio server pre-installed is required. <a href="https://www.bioconductor.org/help/docker/" class="external-link">Bioconductor</a> releases it’s own <code>docker</code> image that inherits from <code>rocker</code>, with other useful system dependencies for analyses of biological data pre-installed, such as core Bioconductor packages. You can download the Bioconductor docker image using:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the 3.13 release version of Bioconductor docker image is used here</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># be sure to check for an updated version as and when you use this guide</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker pull bioconductor/bioconductor_docker:RELEASE_3_13</span></code></pre></div>
 <p><br><br></p>
 </div>
-<div id="start-a-r-studio-server-process-on-a-remote-server" class="section level2">
-<h2 class="hasAnchor">
-<a href="#start-a-r-studio-server-process-on-a-remote-server" class="anchor"></a>Start a R Studio server process (on a remote server)</h2>
+<div class="section level2">
+<h2 id="start-a-r-studio-server-process-on-a-remote-server">Start a R Studio server process (on a remote server)<a class="anchor" aria-label="anchor" href="#start-a-r-studio-server-process-on-a-remote-server"></a>
+</h2>
 <p>To initialise a container running R Studio server on the Bioconductor <code>docker</code> image downloaded above, you need to execute the <code>docker run</code> command with various flags depending on your desired setup. <code>rockup</code> has a single user-level function <code><a href="../reference/docker_run_rserver.html">docker_run_rserver()</a></code> which is designed to make this step easier and executable within <code>R</code>.</p>
-<p>First, make sure you have <code>rockup</code> installed. If you don’t, you can download <code>rockup</code> from GitHub via:</p>
+<p>First, make sure you have <code>rockup</code> installed. If you don’t, you can install <code>rockup</code> from GitHub via:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># this requires R version &gt;= 4.0</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"ryten_lab/rockup"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ryten_lab/rockup"</span><span class="op">)</span></code></pre></div>
 <p>Next, run <code><a href="../reference/docker_run_rserver.html">rockup::docker_run_rserver()</a></code> within an <code>R</code> terminal <strong>on the remote server/machine where you want to use R Studio server</strong>. At a minimum, you should set the <code>image</code>, <code>port</code> and <code>name</code> arguments explained below. Setting the <code>verbose</code> argument to TRUE will print the flags that were used within the <code>docker</code> command and can be useful for debugging or logging.</p>
+<p><strong>Important</strong>: if you are running this on the Ryten lab server, it is worth making sure: 1. The <code>port</code> you use does not overlap with one that’s already in use. The list of in use ports can be found in the ryten_induction bookdown <a href="https://rytenlab.github.io/ryten_induction/server-usage.html#ryten-ports" class="external-link">here</a>. 2. If you’re occupying a new <code>port</code>, please add it to the list of in use ports (or ask another member to).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rockup</span><span class="fu">::</span><span class="fu"><a href="../reference/docker_run_rserver.html">docker_run_rserver</a></span><span class="op">(</span>
-  image <span class="op">=</span> <span class="st">"bioconductor/bioconductor_docker:RELEASE_3_13"</span>, <span class="co"># rocker image</span>
-  port <span class="op">=</span> <span class="fl">8787</span>, <span class="co"># port on which the host will have present R Studio server</span>
+  image <span class="op">=</span> <span class="st">"bioconductor/bioconductor_docker:RELEASE_3_13"</span>, <span class="co"># a rocker image, or one that inherits from rocker</span>
+  port <span class="op">=</span> <span class="fl">8888</span>, <span class="co"># port on which the host will have present R Studio server</span>
   name <span class="op">=</span> <span class="st">"example"</span>, <span class="co"># name of docker process</span>
   verbose <span class="op">=</span> <span class="cn">TRUE</span> <span class="co"># whether to print out the flags passed to the docker command</span>
 <span class="op">)</span></code></pre></div>
 <p><br><br></p>
 </div>
-<div id="connecting-to-a-r-studio-server-process-from-your-local-machine" class="section level2">
-<h2 class="hasAnchor">
-<a href="#connecting-to-a-r-studio-server-process-from-your-local-machine" class="anchor"></a>Connecting to a R Studio server process (from your local machine)</h2>
+<div class="section level2">
+<h2 id="connecting-to-a-r-studio-server-process-from-your-local-machine">Connecting to a R Studio server process (from your local machine)<a class="anchor" aria-label="anchor" href="#connecting-to-a-r-studio-server-process-from-your-local-machine"></a>
+</h2>
 <p>Once the R Studio server process is running, the next step is to map the <code>localhost</code> port of your local machine to the <code>port</code> presenting R Studio server on the remote server (specified above as 8787). You can do so by executing the <code>ssh</code> command shown below <strong>on your local machine</strong>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make sure the port specified here matches the port you have used above in </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># rockup::docker_run_rserver()</span></span>
@@ -148,12 +145,12 @@
 <p>If the above <code>ssh</code> command has run successfully, you will now be able to access R Studio server by going to the address <code>localhost:8787</code> on your local browser. The default login details for the Bioconductor docker are:</p>
 <p>Username: <strong>rstudio</strong></p>
 <p>Password: <strong>bioc</strong></p>
-<p>More details of the Bioconductor docker can be found <a href="https://www.bioconductor.org/help/docker/">here</a>.</p>
+<p>More details of the Bioconductor docker can be found <a href="https://www.bioconductor.org/help/docker/" class="external-link">here</a>.</p>
 <p><br><br></p>
 </div>
-<div id="mounting-volumes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#mounting-volumes" class="anchor"></a>Mounting volumes</h2>
+<div class="section level2">
+<h2 id="mounting-volumes">Mounting volumes<a class="anchor" aria-label="anchor" href="#mounting-volumes"></a>
+</h2>
 <p>Most analyses relies on data that is stored on the original host machine, therefore not (by default) accessible by the <code>docker</code> container. Therefore, it is often useful to mount the required files, allowing them to be accessible by the <code>docker</code> process. Mounting files can be done using <code><a href="../reference/docker_run_rserver.html">rockup::docker_run_rserver()</a></code> via the arguments <code>volumes</code>, <code>volumes_ro</code>.</p>
 <p>Directories mounted using the <code>volumes_ro</code> argument will always have read-only access permissions on the <code>docker</code> container.</p>
 <p>The user permissions for accessing files mounted using <code>volumes</code> argument are dictated by the <code>USERID</code> and <code>GROUPID</code> arguments. These should be set matching the user you would like to mirror the permissions of. On Linux, the <code>USERID</code> and <code>GROUPID</code> of the current user can be obtained via the <code>bash</code> command <code>id</code>. <strong>Warning: depending on the permissions, this could give your docker container the ability to delete the mounted files</strong></p>
@@ -164,13 +161,13 @@
 <span class="co"># volumes_ro - paths will be mounted with read-only access</span>
 <span class="fu">rockup</span><span class="fu">::</span><span class="fu"><a href="../reference/docker_run_rserver.html">docker_run_rserver</a></span><span class="op">(</span>
   image <span class="op">=</span> <span class="st">"bioconductor/bioconductor_docker:RELEASE_3_13"</span>,
-  port <span class="op">=</span> <span class="fl">8787</span>,
+  port <span class="op">=</span> <span class="fl">8888</span>,
   name <span class="op">=</span> <span class="st">"example_2"</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  volumes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  volumes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
     <span class="st">"/path/to/mounted/dir/that/will/match/permissions/"</span>
   <span class="op">)</span>,
-  volumes_ro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  volumes_ro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
     <span class="st">"/path/to/mounted/dir/that/will/be/read_only"</span>
   <span class="op">)</span>,
   permissions <span class="op">=</span> <span class="st">"match"</span>,
@@ -180,60 +177,65 @@
 <p><br><br></p>
 </div>
 </div>
-<div id="session-info" class="section level1">
-<h1 class="hasAnchor">
-<a href="#session-info" class="anchor"></a>Session info</h1>
+<div class="section level1">
+<h1 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h1>
 <details><summary>
 Show/hide
-</summary><pre><code>#&gt; ─ Session info  ──────────────────────────────────────────────────────────────────────────────────────────────────────
-#&gt;  hash: kaaba, old woman: medium skin tone, man office worker: medium-light skin tone
-#&gt; 
-#&gt;  setting  value
-#&gt;  version  R version 4.1.2 (2021-11-01)
-#&gt;  os       Ubuntu 20.04.3 LTS
-#&gt;  system   x86_64, linux-gnu
-#&gt;  ui       X11
-#&gt;  language (EN)
-#&gt;  collate  en_US.UTF-8
-#&gt;  ctype    en_US.UTF-8
-#&gt;  tz       UTC
-#&gt;  date     2021-11-29
-#&gt;  pandoc   2.14.0.3 @ /usr/local/bin/ (via rmarkdown)
-#&gt; 
-#&gt; ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
-#&gt;  package     * version date (UTC) lib source
-#&gt;  cachem        1.0.6   2021-08-19 [2] RSPM (R 4.1.0)
-#&gt;  cli           3.1.0   2021-10-27 [2] RSPM (R 4.1.0)
-#&gt;  crayon        1.4.2   2021-10-29 [2] RSPM (R 4.1.0)
-#&gt;  desc          1.4.0   2021-09-28 [2] RSPM (R 4.1.0)
-#&gt;  digest        0.6.28  2021-09-23 [2] RSPM (R 4.1.0)
-#&gt;  evaluate      0.14    2019-05-28 [2] RSPM (R 4.1.0)
-#&gt;  fastmap       1.1.0   2021-01-25 [2] RSPM (R 4.1.0)
-#&gt;  fs            1.5.0   2020-07-31 [2] RSPM (R 4.1.0)
-#&gt;  htmltools     0.5.2   2021-08-25 [1] RSPM (R 4.1.0)
-#&gt;  knitr         1.36    2021-09-29 [2] RSPM (R 4.1.0)
-#&gt;  magrittr      2.0.1   2020-11-17 [2] RSPM (R 4.1.0)
-#&gt;  memoise       2.0.0   2021-01-26 [2] RSPM (R 4.1.0)
-#&gt;  pkgdown       1.6.1   2020-09-12 [1] RSPM (R 4.1.0)
-#&gt;  R6            2.5.1   2021-08-19 [2] RSPM (R 4.1.0)
-#&gt;  ragg          1.2.0   2021-10-30 [1] RSPM (R 4.1.0)
-#&gt;  rlang         0.4.12  2021-10-18 [2] RSPM (R 4.1.0)
-#&gt;  rmarkdown     2.11    2021-09-14 [1] RSPM (R 4.1.0)
-#&gt;  rockup      * 0.99.0  2021-11-29 [1] Bioconductor
-#&gt;  rprojroot     2.0.2   2020-11-15 [2] RSPM (R 4.1.0)
-#&gt;  sessioninfo * 1.2.1   2021-11-02 [2] RSPM (R 4.1.0)
-#&gt;  stringi       1.7.5   2021-10-04 [2] RSPM (R 4.1.0)
-#&gt;  stringr       1.4.0   2019-02-10 [2] RSPM (R 4.1.0)
-#&gt;  systemfonts   1.0.3   2021-10-13 [1] RSPM (R 4.1.0)
-#&gt;  textshaping   0.3.6   2021-10-13 [1] RSPM (R 4.1.0)
-#&gt;  xfun          0.28    2021-11-04 [2] RSPM (R 4.1.0)
-#&gt;  yaml          2.2.1   2020-02-01 [2] RSPM (R 4.1.0)
-#&gt; 
-#&gt;  [1] /__w/_temp/Library
-#&gt;  [2] /usr/local/lib/R/site-library
-#&gt;  [3] /usr/local/lib/R/library
-#&gt; 
-#&gt; ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</code></pre>
+</summary><pre><code><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Session info  ──────────────────────────────────────────────────────────────────────────────────────────────────────</span></span>
+<span class="co">#&gt;  hash: map of Japan, selfie, flag: Guernsey</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  <span style="color: #555555; font-style: italic;">setting </span> <span style="color: #555555; font-style: italic;">value</span></span>
+<span class="co">#&gt;  version  R version 4.1.2 (2021-11-01)</span>
+<span class="co">#&gt;  os       Ubuntu 20.04.3 LTS</span>
+<span class="co">#&gt;  system   x86_64, linux-gnu</span>
+<span class="co">#&gt;  ui       X11</span>
+<span class="co">#&gt;  language en</span>
+<span class="co">#&gt;  collate  en_US.UTF-8</span>
+<span class="co">#&gt;  ctype    en_US.UTF-8</span>
+<span class="co">#&gt;  tz       UTC</span>
+<span class="co">#&gt;  date     2021-12-04</span>
+<span class="co">#&gt;  pandoc   2.14.0.3 @ /usr/local/bin/ (via rmarkdown)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────</span></span>
+<span class="co">#&gt;  <span style="color: #555555; font-style: italic;">package    </span> <span style="color: #555555; font-style: italic;">*</span> <span style="color: #555555; font-style: italic;">version</span> <span style="color: #555555; font-style: italic;">date (UTC)</span> <span style="color: #555555; font-style: italic;">lib</span> <span style="color: #555555; font-style: italic;">source</span></span>
+<span class="co">#&gt;  bslib         0.3.1   <span style="color: #555555;">2021-10-06</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  cachem        1.0.6   <span style="color: #555555;">2021-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  cli           3.1.0   <span style="color: #555555;">2021-10-27</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  crayon        1.4.2   <span style="color: #555555;">2021-10-29</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  desc          1.4.0   <span style="color: #555555;">2021-09-28</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  digest        0.6.29  <span style="color: #555555;">2021-12-01</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  evaluate      0.14    <span style="color: #555555;">2019-05-28</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  fastmap       1.1.0   <span style="color: #555555;">2021-01-25</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  fs            1.5.1   <span style="color: #555555;">2021-11-30</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  htmltools     0.5.2   <span style="color: #555555;">2021-08-25</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  jquerylib     0.1.4   <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  jsonlite      1.7.2   <span style="color: #555555;">2020-12-09</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  knitr         1.36    <span style="color: #555555;">2021-09-29</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  magrittr      2.0.1   <span style="color: #555555;">2020-11-17</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  memoise       2.0.1   <span style="color: #555555;">2021-11-26</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  pkgdown       2.0.0   <span style="color: #555555;">2021-11-30</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  purrr         0.3.4   <span style="color: #555555;">2020-04-17</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  R6            2.5.1   <span style="color: #555555;">2021-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  ragg          1.2.0   <span style="color: #555555;">2021-10-30</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  rlang         0.4.12  <span style="color: #555555;">2021-10-18</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  rmarkdown     2.11    <span style="color: #555555;">2021-09-14</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  rockup      * 0.99.0  <span style="color: #555555;">2021-12-04</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span>
+<span class="co">#&gt;  rprojroot     2.0.2   <span style="color: #555555;">2020-11-15</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  sass          0.4.0   <span style="color: #555555;">2021-05-12</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  sessioninfo * 1.2.1   <span style="color: #555555;">2021-11-02</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  stringi       1.7.6   <span style="color: #555555;">2021-11-29</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  stringr       1.4.0   <span style="color: #555555;">2019-02-10</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  systemfonts   1.0.3   <span style="color: #555555;">2021-10-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  textshaping   0.3.6   <span style="color: #555555;">2021-10-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  xfun          0.28    <span style="color: #555555;">2021-11-04</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt;  yaml          2.2.1   <span style="color: #555555;">2020-02-01</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.1.0)</span></span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; <span style="color: #555555;"> [1] /__w/_temp/Library</span></span>
+<span class="co">#&gt; <span style="color: #555555;"> [2] /usr/local/lib/R/site-library</span></span>
+<span class="co">#&gt; <span style="color: #555555;"> [3] /usr/local/lib/R/library</span></span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span></span></code></pre>
 </details>
 </div>
   </div>
@@ -249,11 +251,13 @@ Show/hide
 
 
       <footer><div class="copyright">
-  <p>Developed by David Zhang.</p>
+  <p></p>
+<p>Developed by David Zhang.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
 
       </footer>
@@ -261,6 +265,8 @@ Show/hide
 
   
 
+
+  
 
   </body>
 </html>
