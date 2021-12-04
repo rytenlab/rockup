@@ -22,6 +22,7 @@ test_that("docker_run_rserver has correct output", {
   # defaults, only image set
   docker_flags <- docker_run_rserver(
     image = "docker_image",
+    port = 8888,
     return_flags = TRUE
   )
 
@@ -77,23 +78,36 @@ test_that("docker_run_rserver has correct output", {
 
 test_that("docker_run_rserver catches user-input errors", {
   expect_error(
-    docker_flags <- docker_run_rserver(return_flags = TRUE),
+    docker_flags <- docker_run_rserver(port = 8888, return_flags = TRUE),
     'argument "image" is missing, with no default'
   )
   expect_error(
-    docker_flags <- docker_run_rserver(permissions = "match"),
-    "USERID and GROUPID must be non-NULL, if permissions set to 'match'"
+    docker_flags <- docker_run_rserver(return_flags = TRUE),
+    'argument "port" is missing, with no default'
   )
   expect_error(
-    docker_flags <- docker_run_rserver(permissions = "match", USERID = 1000),
-    "USERID and GROUPID must be non-NULL, if permissions set to 'match'"
-  )
-  expect_error(
-    docker_flags <- docker_run_rserver(permissions = "match", GROUPID = 1000),
+    docker_flags <- docker_run_rserver(port = 8888, permissions = "match"),
     "USERID and GROUPID must be non-NULL, if permissions set to 'match'"
   )
   expect_error(
     docker_flags <- docker_run_rserver(
+      port = 8888,
+      permissions = "match",
+      USERID = 1000
+    ),
+    "USERID and GROUPID must be non-NULL, if permissions set to 'match'"
+  )
+  expect_error(
+    docker_flags <- docker_run_rserver(
+      port = 8888,
+      permissions = "match",
+      GROUPID = 1000
+    ),
+    "USERID and GROUPID must be non-NULL, if permissions set to 'match'"
+  )
+  expect_error(
+    docker_flags <- docker_run_rserver(
+      port = 8888,
       permissions = "something",
       USERID = 1000,
       GROUPID = 1000
